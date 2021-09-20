@@ -1,10 +1,8 @@
 
 import tensorflow as tf
-import numpy as np
 import tensorflow.keras as K
-from tensorflow.keras import losses
-from tensorflow.keras.layers import Dense 
-from tensorflow.keras import regularizers
+from tensorflow.keras import layers
+from tensorflow.keras.layers import Dense, Conv2D, MaxPool2D
 
 
 class CatModel(K.Model):
