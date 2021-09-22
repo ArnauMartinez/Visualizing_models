@@ -61,10 +61,11 @@ def get_layers_info():
 
         layers_list.append(layers_name.get(e)())
 
-        if i!=(x-1):
-            layers_list.append(layers.ReLU())
-        else:
-            layers_list.append(layers.Activation('sigmoid'))
+        if e != 'MaxPooling':
+            if i!=(x-1):
+                layers_list.append(layers.ReLU())
+            else:
+                layers_list.append(layers.Activation('sigmoid'))
 
         if e=='Conv2D':
             e_1=e
@@ -88,10 +89,10 @@ def MaxPool2d():
     
     pool_size=int(input('Pool size: \n'))
     stride=pool_size
-    return MaxPool2D(pool_size,stride)
+    padding=input('Padding: [valid/same] \n')
+    return MaxPool2D(pool_size,stride,padding)
 
 def fullyconected():
 
     output_dim=int(input('Number of output neurons: \n'))
-    return Dense(output_dim)    
-
+    return Dense(output_dim)
