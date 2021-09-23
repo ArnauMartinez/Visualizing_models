@@ -64,9 +64,7 @@ def get_layers_info():
         if e != 'MaxPooling':
             if i!=(x-1):
                 layers_list.append(layers.ReLU())
-            else:
-                layers_list.append(layers.Activation('sigmoid'))
-
+        
         if e=='Conv2D':
             e_1=e
         
