@@ -34,7 +34,7 @@ loss_fn=K.losses.BinaryCrossentropy(from_logits=True)
 model.compile(optimizer=opt,loss=loss_fn,metrics=['accuracy'])
 
 history=model.fit(X_train,train_y.T, batch_size=len(X_train),epochs=2500,validation_data=(X_test,test_y.T),validation_batch_size=len(X_test))
-
+model.save_weights('Model_2layers_weights.h5')
 
 
 plt.plot(history.history['accuracy'])
@@ -55,6 +55,3 @@ plt.ylabel('Loss')
 plt.legend(['train','test'],loc='upper left')
 plt.savefig('Model_loss')
 
-
-model.load_weights('Model_2layers_weights.h5')
-model.evaluate(X_test,test_y.T)
