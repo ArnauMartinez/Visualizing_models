@@ -16,17 +16,20 @@ def create_model():
 optimizer= torch.optim.Adam
 datadir='colorferet/dvd1/data/images'
 
-train_dl=normalize_data(datadir,'Preprocess_data_dvd1.txt')
+transform=transforms.Compose([RandomHorizontalFlip(),ToTensor(),Resize(size=(256,171)),RandomCrop(size=(256,171),padding=(40,26),padding_mode='reflect')])
+dataset=ImageFolder(datadir,transform=transform) #Crea el dataset automàticament
+train_dl=DataLoader(dataset, batch_size=55,shuffle=True) #Retorna un iterable per poder iterar sobre la base de dades
+
 loss_fn=F.cross_entropy
 learning_rate=0.0005
 
-def accuracy(outputs,labels):
+def accuracy(outputs,labels): #Calcula la precisió del conjunt de dades que se li dona
     __,preds=torch.max(outputs,dim=1)
-    return torch.sum(preds==labels).item()/len(labels)
+    return torch.sum(preds==labels).item()/len(labels) 
 
 
 
-def loss_batch(model, xb,yb, loss_fn,  metric=None, opt=None):
+def loss_batch(model, xb,yb, loss_fn,  metric=None, opt=None): #Calcula el cost d'un únic mini-batch
     preds=model(xb)
     loss=loss_fn(preds,yb)
     if opt is not None:
@@ -41,7 +44,7 @@ def loss_batch(model, xb,yb, loss_fn,  metric=None, opt=None):
     return preds, float(loss), float(metric_result)
 
 
-def fit(model, train_dl, loss_fn, lr=0.001, epochs=1, optimizer=None, metric=None):
+def fit(model, train_dl, loss_fn, lr=0.001, epochs=1, optimizer=None, metric=None): #Optimitza el model utilitzant les funcions anteriors i el dataset
     
     if optimizer is not None:
         model.train()
