@@ -1,0 +1,4 @@
+params_doc,persons_in_db,distance_threshold,images_evaluated,total_success,errors_both_db,false_positives,false_negatives,pairing_success
+Fine_tuned_params_256x171.pt,10,18,3527.0,3394.0,0.0,57.0,77.0,176.0
+Model_state_dict_256x171.pt,10,18,3527.0,3276.0,3.0,3.0,246.0,4.0
+Model_state_dict_256x171_v2.pt,10,18,3527.0,3287.0,0.0,11.0,230.0,23.0
