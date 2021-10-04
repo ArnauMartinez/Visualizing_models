@@ -1,30 +1,13 @@
 
-from numpy.matrixlib.defmatrix import matrix
-from torchvision import transforms
-from torchvision.transforms import ToTensor
-from torch.utils.data import  Dataset
-import pandas as pd
-from PIL import ImageFile, Image
-import random
-import os
-from torchvision.transforms import functional as F
-import numpy as np
-import torch
-from torchvision.transforms import Normalize
-import matplotlib.pyplot as plt
-
-
-
-
 class Feret_database_triplets(Dataset):
-    def __init__(self,csv_file,triplet_dict, transformation=True):
-        self.transformation=transformation
+    def __init__(self,csv_file, tranformation=True):
+        self.transformation=tranformation
         self.csv_file=pd.read_csv(csv_file)
-        self.triplet_dict=triplet_dict
+        
         
     
     def __len__(self):
-        return len(self.triplet_dict)
+        return len(self.csv_file)
     
     def __getitem__(self, index):
         ImageFile.LOAD_TRUNCATED_IMAGES=True
@@ -32,10 +15,10 @@ class Feret_database_triplets(Dataset):
         indexer=self.csv_file.index
         label=self.csv_file.iloc[index,1]
         pose=self.csv_file.iloc[index,2]
-
+        
         condition=self.csv_file['subject']==label
         pose_condition=self.csv_file['pose']==pose
-        inv_condition=self.csv_file['subject']==self.triplet_dict[str(index)]
+        inv_condition=np.invert(condition)
         Neg_condition=pose_condition & inv_condition
 
 
@@ -66,8 +49,8 @@ class Feret_database_triplets(Dataset):
             else:
                 Pos_img=F.hflip(Pos_img)
         
-        mean,std=torch.load('Preprocess_data_dvd1.txt')
-        transform=transforms.Compose([ToTensor(),Normalize(mean,std)])
+        
+        transform=transforms.Compose([ToTensor(),Resize(size=(256,171)),RandomCrop(size=(256,171),padding=(40,26),padding_mode='reflect')])
 
         for i,image in enumerate(images):
             images[i]=transform(image) 
@@ -75,19 +58,6 @@ class Feret_database_triplets(Dataset):
         
         
         return images
-        
-            
-
-
-class Test_database(Dataset):
-    def __init__(self,csv_file):
-        super(Test_database,self).__init__()
-        self.csv_file=pd.read_csv(csv_file)
-    def __len__(self):
-        return len(self.csv_file)
-    def __getitem__(self, index):
-        image_name=self.csv_file.iloc[index,0]
-        img=Image.open(image_name)
         
 
 
