@@ -8,23 +8,16 @@ from Model.Dataset import Feret_database_triplets
 import matplotlib.pyplot as plt
 import torch.nn.functional as F
 
-
+csv_file='Dataset_k_1.csv
 model=FaceNet(last_lyr=False)
-model
 model.load_state_dict(torch.load('./Model/model_params_definitive.pt'),strict=False)
 
 
 
 
-dataset=Feret_database_triplets('Dataset2.csv')
-
+dataset=Feret_database_triplets(csv_file)
 
 train_dl=DataLoader(dataset, batch_size=16,shuffle=True)
-
-
-
-
-
 
 
 def loss_batch_triplet(model,anchor_imgs,Pos_imgs,Neg_imgs,loss_fn,opt=None, metric=None):
@@ -65,7 +58,7 @@ def triplet_convergence(model,train_dl,loss_fn, epochs,lr=0.001,opt=None, metric
         metrics=torch.zeros((epochs, len(train_dl)),dtype=float)
 
     for e in range(epochs):
-        dataset=Feret_database_triplets('Dataset2.csv')
+        dataset=Feret_database_triplets(csv_file)
 
 
         train_dl=DataLoader(dataset, batch_size=16,shuffle=True)
